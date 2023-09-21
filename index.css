@@ -30,13 +30,13 @@
 }
 
 .main-game-grid{
-    margin-top: 2rem;
+    margin-top: 0.4rem;
     margin-left: 10rem;
     margin-right: 10rem;
     padding: 1rem;
-    background-color: gray;
+    
     display: grid;
-    grid-template-columns: repeat(8, 1fr);
-    grid-template-rows: repeat(8, 1fr);
+    
     justify-content: center;
+    gap: 0.2rem;
 }
