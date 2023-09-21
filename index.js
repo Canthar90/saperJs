@@ -7,6 +7,7 @@ let interval
 let gameStartFlag = true
 let gameSegments = []
 let gameBoard =  document.getElementById("game-grid")
+let mineSegments = []
 
 const rem = Number(parseFloat(getComputedStyle(document.documentElement).fontSize)) 
 
@@ -17,17 +18,56 @@ if (!interval) {
 
 function generateOneSegment(xPosition, yPosition){
     
-    let newSegment = document.createElement("button")
+    let newSegment = {
+        isAbomb: false,
+        x: xPosition,
+        y: yPosition,
+        htmlElem: undefined
+    }
+
+   newSegment.htmlElem = document.createElement("button")
     
-    newSegment.style.width = 2*rem
-    newSegment.style.cursor = "pointer"
-    newSegment.style.height = 2*rem
-    newSegment.style.gridColumnStart = yPosition
-    newSegment.style.gridRowStart = xPosition
+    newSegment.htmlElem.style.width = 2*rem
+    newSegment.htmlElem.style.cursor = "pointer"
+    newSegment.htmlElem.style.height = 2*rem
+    newSegment.htmlElem.style.gridColumnStart = yPosition
+    newSegment.htmlElem.style.gridRowStart = xPosition
+
 
     gameSegments.push(newSegment)
-    gameBoard.appendChild(newSegment)
+    gameBoard.appendChild(newSegment.htmlElem)
     
+}
+
+function generateRandomMineIndexes(quantity) {
+    
+    const arr = []
+    while(arr.length < quantity){
+        var candidateInt = Math.floor(Math.random() * gameSegments.length) + 1
+        if(arr.indexOf(candidateInt) === -1) arr.push(candidateInt)
+    }
+    return(arr)
+    }
+ 
+
+function minesGenerating(randomNumbersList){
+    
+
+    for (number in randomNumbersList){
+        let segmentWitchMine = gameSegments[randomNumbersList[number]]
+        segmentWitchMine.isAbomb = true
+        segmentWitchMine.htmlElem.style.backgroundColor = "red"
+        mineSegments.push(segmentWitchMine)
+      
+    }
+}
+
+function mineGeneration(){
+    randomNumbers =  generateRandomMineIndexes(numberOfMines)
+    console.log(randomNumbers)
+    minesGenerating(randomNumbers)
+    gameStartFlag = false
+
 }
 
 function generateGameGrid() {
@@ -38,12 +78,17 @@ function generateGameGrid() {
             generateOneSegment(x, y)
         }
      }
-     gameStartFlag = false
+
+    //  minesGenerating()
+    mineGeneration()
+     
 }
 
 
 function gameLogic(){
     if (gameStartFlag){
         generateGameGrid()
+        
     }
+
 }
