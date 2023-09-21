@@ -1,0 +1,42 @@
+.main-menu {
+    display: flex;
+    justify-content: center;
+    margin-top: 3rem;
+}
+
+.mine-detection-counter{
+    background-color: black;
+    color: red;
+    font-size: 1.4rem;
+    padding: 0.5rem 2rem;
+    
+}
+
+.game-state-emoji{
+    background-color: gray;
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+    padding: 1rem;
+    cursor: pointer;
+    
+}
+
+.timer{
+    background-color: black;
+    color: red;
+    font-size: 1.4rem;
+    padding: 0.5rem 2rem;
+}
+
+.main-game-grid{
+    margin-top: 2rem;
+    margin-left: 10rem;
+    margin-right: 10rem;
+    padding: 1rem;
+    background-color: gray;
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(8, 1fr);
+    justify-content: center;
+}
