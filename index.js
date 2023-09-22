@@ -1,7 +1,8 @@
 let numberOfMines = 10
 let xPoolsCount = 8
 let yPollsCount = 8
-let timer = 10
+let timerMinutes = 10
+let timerSeconds = 0
 let numberOfMineCovers = 8
 let interval
 let gameStartFlag = true
@@ -12,6 +13,21 @@ let gameBoard =  document.getElementById("game-grid")
 let mineSegments = []
 let minutes = 1     
 let seconds = 20
+let gameStateEmoji = document.getElementById("game-state-emoji")
+let gameResetButton = document.getElementById("game-emoji")
+
+
+function gameReset() {
+    gameStartFlag = true
+    gameCountdownFlag = true
+    gameEnded = false
+    mineSegments = []
+    gameSegments=[]
+    minutes = timerMinutes
+    seconds = timerSeconds
+}
+
+
 
 const rem = Number(parseFloat(getComputedStyle(document.documentElement).fontSize)) 
 
@@ -105,12 +121,16 @@ function timeCountdown(){
     }else if(seconds === 0 && minutes === 0){
         gameCountdownFlag = false
         gameEnded = true
-        console.log(gameEnded)
+        gameStateEmoji.innerHTML = "😔"
     }
 }
 
 
 function gameLogic(){
+    if (gameEnded){
+        return
+    }
+
     if (gameStartFlag){
         generateGameGrid()
         swapCounters()
