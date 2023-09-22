@@ -5,10 +5,12 @@ let timer = 10
 let numberOfMineCovers = 8
 let interval
 let gameStartFlag = true
+let gameCountdownFlag = true
+let gameEnded = false
 let gameSegments = []
 let gameBoard =  document.getElementById("game-grid")
 let mineSegments = []
-let minutes = 10
+let minutes = 1     
 let seconds = 20
 
 const rem = Number(parseFloat(getComputedStyle(document.documentElement).fontSize)) 
@@ -94,13 +96,27 @@ function generateGameGrid() {
      
 }
 
+function timeCountdown(){
+    if (seconds > 0 ){
+        seconds--
+    }else if (seconds === 0 && minutes > 0){
+        seconds = 59
+        minutes--
+    }else if(seconds === 0 && minutes === 0){
+        gameCountdownFlag = false
+        gameEnded = true
+        console.log(gameEnded)
+    }
+}
+
 
 function gameLogic(){
     if (gameStartFlag){
         generateGameGrid()
         swapCounters()
-    }else {
-
+    }else if(gameCountdownFlag) {
+        timeCountdown()
+        swapCounters()
     }
 
 }
