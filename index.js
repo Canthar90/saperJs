@@ -2,17 +2,20 @@ let numberOfMines = 10
 let xPoolsCount = 8
 let yPollsCount = 8
 let timer = 10
-let numberOfMineCovers = 10
+let numberOfMineCovers = 8
 let interval
 let gameStartFlag = true
 let gameSegments = []
 let gameBoard =  document.getElementById("game-grid")
 let mineSegments = []
+let minutes = 10
+let seconds = 20
 
 const rem = Number(parseFloat(getComputedStyle(document.documentElement).fontSize)) 
 
 
 if (!interval) {
+    gameLogic()
     interval = setInterval(gameLogic, 1000)
 }
 
@@ -43,7 +46,7 @@ function generateRandomMineIndexes(quantity) {
     
     const arr = []
     while(arr.length < quantity){
-        var candidateInt = Math.floor(Math.random() * gameSegments.length) + 1
+        var candidateInt = Math.floor(Math.random() * gameSegments.length)
         if(arr.indexOf(candidateInt) === -1) arr.push(candidateInt)
     }
     return(arr)
@@ -64,11 +67,20 @@ function minesGenerating(randomNumbersList){
 
 function mineGeneration(){
     randomNumbers =  generateRandomMineIndexes(numberOfMines)
-    console.log(randomNumbers)
     minesGenerating(randomNumbers)
     gameStartFlag = false
 
 }
+
+function swapCounters(){
+    
+    let mineCoverCount = `${numberOfMineCovers}`.padStart(3,0)
+    document.getElementById("mine-cover-count").innerHTML = mineCoverCount
+
+    let timerDisplay = `${minutes}`.padStart(2,0) + ":" + `${seconds}`.padStart(2,0)
+    document.getElementById("game-timer").innerHTML = timerDisplay
+}
+
 
 function generateGameGrid() {
      for (let x = 1; x < xPoolsCount+1 ; x++) {
@@ -78,8 +90,6 @@ function generateGameGrid() {
             generateOneSegment(x, y)
         }
      }
-
-    //  minesGenerating()
     mineGeneration()
      
 }
@@ -88,7 +98,9 @@ function generateGameGrid() {
 function gameLogic(){
     if (gameStartFlag){
         generateGameGrid()
-        
+        swapCounters()
+    }else {
+
     }
 
 }
