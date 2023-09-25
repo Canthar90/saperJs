@@ -15,6 +15,7 @@ let minutes = 1
 let seconds = 20
 let gameStateEmoji = document.getElementById("game-state-emoji")
 let gameResetButton = document.getElementById("game-emoji")
+let notABombSegments
 
 
 function gameReset() {
@@ -43,7 +44,8 @@ function generateOneSegment(xPosition, yPosition){
         isAbomb: false,
         x: xPosition,
         y: yPosition,
-        htmlElem: undefined
+        htmlElem: undefined,
+        icon: 0
     }
 
    newSegment.htmlElem = document.createElement("button")
@@ -125,6 +127,35 @@ function timeCountdown(){
     }
 }
 
+function bombSegmentsRemoval() {
+    let cleanedArray = gameSegments
+    
+    for (segment in mineSegments){
+        let value = mineSegments[segment]
+        let index = cleanedArray.indexOf(value)
+        cleanedArray.splice(index, 1) 
+    }
+}
+
+
+function localizingNearMineSegments(x, y){
+    console.log(x + " : " + y)
+    
+}
+
+function creatingMarkers(){
+    for (mine in mineSegments) {
+        let mineSegmentColumn = mineSegments[mine].y
+        let mineSegmentRow = mineSegments[mine].x
+        localizingNearMineSegments(mineSegmentRow, mineSegmentColumn)
+    }
+}
+
+function generateNumbers() {
+    notABombSegments = bombSegmentsRemoval()
+    creatingMarkers()
+}
+
 
 function gameLogic(){
     if (gameEnded){
@@ -134,6 +165,7 @@ function gameLogic(){
     if (gameStartFlag){
         generateGameGrid()
         swapCounters()
+        generateNumbers()
     }else if(gameCountdownFlag) {
         timeCountdown()
         swapCounters()
