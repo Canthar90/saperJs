@@ -135,12 +135,27 @@ function bombSegmentsRemoval() {
         let index = cleanedArray.indexOf(value)
         cleanedArray.splice(index, 1) 
     }
+    return cleanedArray
 }
 
 
 function localizingNearMineSegments(x, y){
     console.log(x + " : " + y)
-    
+    for (segment in notABombSegments){
+        
+        let seg = notABombSegments[segment]
+
+        if ((seg.x === x+1 && seg.y === y+1)||(seg.x === x-1 && seg.y === y-1)
+        ||(seg.x === x+1 && seg.y === y-1)|| (seg.x === x-1 && seg.y === y+1)
+        || (seg.x === x && seg.y === y-1)|| (seg.x === x && seg.y === y+1)
+        || (seg.x === x+1 && seg.y === y)|| (seg.x === x-1 && seg.y === y))
+        {
+            
+            seg.icon++
+           
+            seg.htmlElem.innerHTML = `${seg.icon}`
+        }
+    }
 }
 
 function creatingMarkers(){
