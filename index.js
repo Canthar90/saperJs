@@ -55,6 +55,8 @@ function generateOneSegment(xPosition, yPosition){
     newSegment.htmlElem.style.height = 2*rem
     newSegment.htmlElem.style.gridColumnStart = yPosition
     newSegment.htmlElem.style.gridRowStart = xPosition
+    newSegment.htmlElem.style.backgroundColor = "#D2E0FB" 
+    newSegment.htmlElem.onclick = function action(button){actionAfterClick(button)}
 
 
     gameSegments.push(newSegment)
@@ -79,7 +81,7 @@ function minesGenerating(randomNumbersList){
     for (number in randomNumbersList){
         let segmentWitchMine = gameSegments[randomNumbersList[number]]
         segmentWitchMine.isAbomb = true
-        segmentWitchMine.htmlElem.style.backgroundColor = "red"
+        // segmentWitchMine.htmlElem.style.backgroundColor = "red"
         mineSegments.push(segmentWitchMine)
       
     }
@@ -140,7 +142,7 @@ function bombSegmentsRemoval() {
 
 
 function localizingNearMineSegments(x, y){
-    console.log(x + " : " + y)
+    
     for (segment in notABombSegments){
         
         let seg = notABombSegments[segment]
@@ -153,7 +155,7 @@ function localizingNearMineSegments(x, y){
             
             seg.icon++
            
-            seg.htmlElem.innerHTML = `${seg.icon}`
+            // seg.htmlElem.innerHTML = `${seg.icon}`
         }
     }
 }
@@ -172,6 +174,12 @@ function generateNumbers() {
 }
 
 
+function actionAfterClick(button){
+    console.log("Click")
+    console.log(button)
+}
+
+
 function gameLogic(){
     if (gameEnded){
         return
@@ -184,6 +192,7 @@ function gameLogic(){
     }else if(gameCountdownFlag) {
         timeCountdown()
         swapCounters()
+        
     }
 
 }
