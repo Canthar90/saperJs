@@ -26,6 +26,7 @@ function gameReset() {
     gameSegments=[]
     minutes = timerMinutes
     seconds = timerSeconds
+    gameStateEmoji.innerHTML = "😊"
 }
 
 
@@ -122,8 +123,8 @@ function generateGameGrid() {
 
 function gameOver(){
     gameCountdownFlag = false
-        gameEnded = true
-        gameStateEmoji.innerHTML = "😔"
+    gameEnded = true
+    gameStateEmoji.innerHTML = "😔"
 }
 
 function timeCountdown(){
@@ -190,15 +191,28 @@ function mineStepped(){
     }
 }
 
+function uncoverSegments(segment){
+    if (segment.icon === 0){
+        segment.htmlElem.style.backgroundColor = "white"
+        let nextSegments = []
+
+    }else {
+        segment.htmlElem.style.backgroundColor = "white"
+        segment.htmlElem.innerHTML = segment.icon
+    }
+}
+
 function actionAfterClick(button){
     if (gameEnded) return
 
     
     let searchedId = Number(button.target.id)
-    let indexOfSearchedSegment = gameSegments.find(item => Number(item.id) === searchedId)
+    let clickedSegment = gameSegments.find(item => Number(item.id) === searchedId)
     
-    if (!indexOfSearchedSegment) {
+    if (!clickedSegment) {
         mineStepped()
+    }else {
+        uncoverSegments(clickedSegment)
     }
 
 }
