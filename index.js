@@ -11,7 +11,7 @@ let gameEnded = false
 let gameSegments = []
 let gameBoard =  document.getElementById("game-grid")
 let mineSegments = []
-let minutes = 1     
+let minutes = 1 
 let seconds = 20
 let gameStateEmoji = document.getElementById("game-state-emoji")
 let gameResetButton = document.getElementById("game-emoji")
@@ -38,14 +38,15 @@ if (!interval) {
     interval = setInterval(gameLogic, 1000)
 }
 
-function generateOneSegment(xPosition, yPosition){
+function generateOneSegment(xPosition, yPosition, id){
     
     let newSegment = {
         isAbomb: false,
         x: xPosition,
         y: yPosition,
         htmlElem: undefined,
-        icon: 0
+        icon: 0,
+        id: id
     }
 
    newSegment.htmlElem = document.createElement("button")
@@ -56,6 +57,7 @@ function generateOneSegment(xPosition, yPosition){
     newSegment.htmlElem.style.gridColumnStart = yPosition
     newSegment.htmlElem.style.gridRowStart = xPosition
     newSegment.htmlElem.style.backgroundColor = "#D2E0FB" 
+    newSegment.htmlElem.id = id
     newSegment.htmlElem.onclick = function action(button){actionAfterClick(button)}
 
 
@@ -105,15 +107,23 @@ function swapCounters(){
 
 
 function generateGameGrid() {
+    let id = 1
      for (let x = 1; x < xPoolsCount+1 ; x++) {
         
         for(let y = 1; y < yPollsCount+1; y++) {
             
-            generateOneSegment(x, y)
+            generateOneSegment(x, y, id)
+            id++
         }
      }
     mineGeneration()
      
+}
+
+function gameOver(){
+    gameCountdownFlag = false
+        gameEnded = true
+        gameStateEmoji.innerHTML = "😔"
 }
 
 function timeCountdown(){
@@ -123,9 +133,7 @@ function timeCountdown(){
         seconds = 59
         minutes--
     }else if(seconds === 0 && minutes === 0){
-        gameCountdownFlag = false
-        gameEnded = true
-        gameStateEmoji.innerHTML = "😔"
+        gameOver()
     }
 }
 
@@ -173,10 +181,26 @@ function generateNumbers() {
     creatingMarkers()
 }
 
+function mineStepped(){
+    for (mine in mineSegments){
+        let currentMine = mineSegments[mine]
+        currentMine.htmlElem.style.backgroundColor = "red"
+        currentMine.htmlElem.innerHTML = "💣"
+        gameOver()
+    }
+}
 
 function actionAfterClick(button){
-    console.log("Click")
-    console.log(button)
+    if (gameEnded) return
+
+    
+    let searchedId = Number(button.target.id)
+    let indexOfSearchedSegment = gameSegments.find(item => Number(item.id) === searchedId)
+    
+    if (!indexOfSearchedSegment) {
+        mineStepped()
+    }
+
 }
 
 
