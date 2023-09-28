@@ -192,84 +192,118 @@ function mineStepped(){
     }
 }
 
-function sequenceForNexUncovering(segment){
-let nextSegments = []
+function leftCornerUncovering(segment){
     if (segment.x === 1 && segment.y === 1){
-        // right left corner
+        // right left top corner
         let nextSegmentRight = gameSegments.find(item => item.x === segment.x + 1 && item.y === segment.y)
         let nextSegmentBottom = gameSegments.find(item => item.x === segment.x && item.y === segment.y + 1)
-        nextSegments = [nextSegmentRight, nextSegmentBottom]
+        let nextSegments = [nextSegmentRight, nextSegmentBottom]
         
         nextUncovering(nextSegments)
-
-    } else if (segment.x === 1 && segment.y > 1 && segment.y < yPollsCount ){
-        // up edge
-        let nextSegmentRight = gameSegments.find(item => item.x === segment.x + 1 && item.y === segment.y) 
-        let nextSegmentBottom = gameSegments.find(item => item.x === segment.x && item.y === segment.y + 1)
-        let nextSegmentLeft = gameSegments.find(item => item.x === segment.x && item.y === segment.y-1)
-        nextSegments = [nextSegmentRight, nextSegmentBottom, nextSegmentLeft]
-        nextUncovering(nextSegments)
-
-    } else if (segment.x > 1 && segment.x < xPoolsCount && segment.y > 1 && segment.y < yPollsCount){
-        // general middle
-        let nextSegmentRight = gameSegments.find(item => item.x === segment.x && item.y === segment.y +1) 
-        let nextSegmentBottom = gameSegments.find(item => item.x+1 === segment.x && item.y === segment.y )
-        let nextSegmentLeft = gameSegments.find(item => item.x === segment.x && item.y === segment.y-1)
-        let nextSegmentUp = gameSegments.find(item => item.x === segment.x-1 && item.y === segment.y)
-        nextSegments = [nextSegmentRight, nextSegmentBottom, nextSegmentLeft, nextSegmentUp]
-        nextUncovering(nextSegments)
-
-    } else if (segment.x === xPoolsCount && segment.y > 1 && segment.y < yPollsCount){
-        // bottom board edge
-        let nextSegmentUp = gameSegments.find(item => item.x === segment.x - 1 && item.y === segment.y)
-        let nextSegmentLeft = gameSegments.find(item => item.x === segment.x && item.y === segment.y - 1)
-        let nextSegmentRight = gameSegments.find(item => item.x === segment.x  && item.y === segment.y + 1)
-        nextSegments = [nextSegmentUp, nextSegmentRight, nextSegmentLeft]
-        nextUncovering(nextSegments)
-
-    } else if(segment.x > 1 && segment.x < xPoolsCount && segment.y === 1){
-        // left board edge
-        let nextSegmentUp = gameSegments.find(item => item.x === segment.x - 1 && item.y === segment.y)
-        let nextSegmentDown = gameSegments.find(item => item.x === segment.x + 1   && item.y === segment.y)
-        let nextSegmentRight = gameSegments.find(item => item.x === segment.x && item.y === segment.y + 1)
-        nextSegments = [nextSegmentDown, nextSegmentRight, nextSegmentUp]
-        nextUncovering(nextSegments)
-
-    } else if(segment.x > 1 && segment.x < xPoolsCount && segment.y === yPollsCount){
-        // right board edge
-        let nextSegmentUp = gameSegments.find(item => item.x === segment.x - 1 && item.y === segment.y)
-        let nextSegmentDown = gameSegments.find(item => item.x === segment.x + 1 && item.y === segment.y)
-        let nextSegmentLeft = gameSegments.find(item => item.x === segment.x && item.y === segment.y - 1)
-        nextSegments = [nextSegmentDown, nextSegmentUp, nextSegmentLeft]
-        nextUncovering(nextSegments)
-
-    } else if(segment.x === xPoolsCount && segment.y === 1){
-        // left down corner
-        let nextSegmentUp = gameSegments.find(item => item.x === segment.x - 1 && item.y === segment.y)
-        let nextSegmentRight = gameSegments.find(item => item.x === segment.x && item.y === segment.y + 1)
-        nextSegments = [nextSegmentUp, nextSegmentRight]
-        nextUncovering(nextSegments)
-
-    } else if(segment.x === xPoolsCount && segment.y === yPollsCount){
-        // right down corner
-        let nextSegmentUp = gameSegments.find(item => item.x === segment.x - 1 && item.y === segment.y)
-        let nextSegmentLeft = gameSegments.find(item => item.x === segment.x && item.y === segment.y - 1)
-        nextSegments = [nextSegmentUp, nextSegmentLeft]
-        nextUncovering(nextSegments)
-
-    }else if (segment.x === 1 && segment.y === yPollsCount){
-        // right top edge corner
-        let nextSegmentDown = gameSegments.find(item => item.x === segment.x + 1 && item.y === segment.y)
-        let nextSegmentLeft = gameSegments.find(item => item.x === segment.x && item.y === segment.y - 1)
-        nextSegments = [nextSegmentDown, nextSegmentLeft]
-        nextUncovering(nextSegments)
     }
-    
+}
+
+function upEdgeUncovering(segment){
+    if (segment.x === 1 && segment.y > 1 && segment.y < yPollsCount ){
+            // up edge
+            let nextSegmentRight = gameSegments.find(item => item.x === segment.x + 1 && item.y === segment.y) 
+            let nextSegmentBottom = gameSegments.find(item => item.x === segment.x && item.y === segment.y + 1)
+            let nextSegmentLeft = gameSegments.find(item => item.x === segment.x && item.y === segment.y - 1)
+            let nextSegments = [nextSegmentRight, nextSegmentBottom, nextSegmentLeft]
+            nextUncovering(nextSegments)
+    }
+}
+
+function generalMiddleUncovering(segment){
+    if (segment.x > 1 && segment.x < xPoolsCount && segment.y > 1 && segment.y < yPollsCount){
+            // general middle
+            let nextSegmentRight = gameSegments.find(item => item.x === segment.x && item.y === segment.y + 1) 
+            let nextSegmentBottom = gameSegments.find(item => item.x + 1 === segment.x && item.y === segment.y )
+            let nextSegmentLeft = gameSegments.find(item => item.x === segment.x && item.y === segment.y - 1)
+            let nextSegmentUp = gameSegments.find(item => item.x === segment.x - 1 && item.y === segment.y)
+            let nextSegments = [nextSegmentRight, nextSegmentBottom, nextSegmentLeft, nextSegmentUp]
+            nextUncovering(nextSegments)
+    }
+}
+
+function bottomBoardEdgeUncovering(segment){
+    if (segment.x === xPoolsCount && segment.y > 1 && segment.y < yPollsCount){
+            // bottom board edge
+            let nextSegmentUp = gameSegments.find(item => item.x === segment.x - 1 && item.y === segment.y)
+            let nextSegmentLeft = gameSegments.find(item => item.x === segment.x && item.y === segment.y - 1)
+            let nextSegmentRight = gameSegments.find(item => item.x === segment.x  && item.y === segment.y + 1)
+            let nextSegments = [nextSegmentUp, nextSegmentRight, nextSegmentLeft]
+            nextUncovering(nextSegments)
+    }
+}
+
+function leftBoardEdgeUncovering(segment){
+    if(segment.x > 1 && segment.x < xPoolsCount && segment.y === 1){
+            // left board edge
+            let nextSegmentUp = gameSegments.find(item => item.x === segment.x - 1 && item.y === segment.y)
+            let nextSegmentDown = gameSegments.find(item => item.x === segment.x + 1   && item.y === segment.y)
+            let nextSegmentRight = gameSegments.find(item => item.x === segment.x && item.y === segment.y + 1)
+            let nextSegments = [nextSegmentDown, nextSegmentRight, nextSegmentUp]
+            nextUncovering(nextSegments)
+    }
+}
+
+function rightBoardEdgeUncovering(segment){
+    if(segment.x > 1 && segment.x < xPoolsCount && segment.y === yPollsCount){
+            // right board edge
+            let nextSegmentUp = gameSegments.find(item => item.x === segment.x - 1 && item.y === segment.y)
+            let nextSegmentDown = gameSegments.find(item => item.x === segment.x + 1 && item.y === segment.y)
+            let nextSegmentLeft = gameSegments.find(item => item.x === segment.x && item.y === segment.y - 1)
+            let nextSegments = [nextSegmentDown, nextSegmentUp, nextSegmentLeft]
+            nextUncovering(nextSegments)
+    }
+}
+
+function leftDownCornerUncoverintg(segment){
+    if(segment.x === xPoolsCount && segment.y === 1){
+            // left down corner
+            let nextSegmentUp = gameSegments.find(item => item.x === segment.x - 1 && item.y === segment.y)
+            let nextSegmentRight = gameSegments.find(item => item.x === segment.x && item.y === segment.y + 1)
+            let nextSegments = [nextSegmentUp, nextSegmentRight]
+            nextUncovering(nextSegments)
+    }
+}
+
+function rightDownCornerUncovering(segment){
+    if(segment.x === xPoolsCount && segment.y === yPollsCount){
+            // right down corner
+            let nextSegmentUp = gameSegments.find(item => item.x === segment.x - 1 && item.y === segment.y)
+            let nextSegmentLeft = gameSegments.find(item => item.x === segment.x && item.y === segment.y - 1)
+            let nextSegments = [nextSegmentUp, nextSegmentLeft]
+            nextUncovering(nextSegments)
+    }
+}
+
+function rightTopCornerUncovering(segment){
+    if (segment.x === 1 && segment.y === yPollsCount){
+            // right top edge corner
+            let nextSegmentDown = gameSegments.find(item => item.x === segment.x + 1 && item.y === segment.y)
+            let nextSegmentLeft = gameSegments.find(item => item.x === segment.x && item.y === segment.y - 1)
+            let nextSegments = [nextSegmentDown, nextSegmentLeft]
+            nextUncovering(nextSegments)
+    }
+}
+
+function sequenceForNexUncovering(segment){
+
+    leftCornerUncovering(segment)
+    rightTopCornerUncovering(segment)
+    rightDownCornerUncovering(segment)
+    leftDownCornerUncoverintg(segment)
+    upEdgeUncovering(segment)
+    generalMiddleUncovering(segment)
+    bottomBoardEdgeUncovering(segment)
+    leftBoardEdgeUncovering(segment)
+    rightBoardEdgeUncovering(segment)
 }
 
 function nextUncovering(segmentsList){
     for (seg in segmentsList){
-        console.log("segmenting")
         uncoverSegments(segmentsList[seg])
     }
 }
