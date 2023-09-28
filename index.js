@@ -47,7 +47,8 @@ function generateOneSegment(xPosition, yPosition, id){
         y: yPosition,
         htmlElem: undefined,
         icon: 0,
-        id: id
+        id: id,
+        hidden: true
     }
 
    newSegment.htmlElem = document.createElement("button")
@@ -191,14 +192,50 @@ function mineStepped(){
     }
 }
 
-function uncoverSegments(segment){
-    if (segment.icon === 0){
-        segment.htmlElem.style.backgroundColor = "white"
-        let nextSegments = []
+function sequenceForNexUncovering(segment){
+let nextSegments = []
+    if (segment.x === 1 && segment.y === 1){
+        let nextSegmentRight = gameSegments.find(item => item.x === segment.x + 1 && item.y === segment.y)
+        let nextSegmentBottom = gameSegments.find(item => item.x === segment.x && item.y === segment.y + 1)
+        nextSegments = [nextSegmentRight, nextSegmentBottom]
+        
+        nextUncovering(nextSegments)
+    } else if (segment.x === 1 && segment.y > 1 && segment.y < yPollsCount ){
+        
+        let nextSegmentRight = gameSegments.find(item => item.x === segment.x + 1 && item.y === segment.y) 
+        let nextSegmentBottom = gameSegments.find(item => item.x === segment.x && item.y === segment.y + 1)
+        let nextSegmentLeft = gameSegments.find(item => item.x === segment.x && item.y === segment.y-1)
+        nextSegments = [nextSegmentRight, nextSegmentBottom, nextSegmentLeft]
+        nextUncovering(nextSegments)
+    } else if (segment.x > 1 && segment.x < xPoolsCount && segment.y > 1 && segment.y < yPollsCount){
+        let nextSegmentRight = gameSegments.find(item => item.x === segment.x + 1 && item.y === segment.y) 
+        let nextSegmentBottom = gameSegments.find(item => item.x === segment.x && item.y === segment.y + 1)
+        let nextSegmentLeft = gameSegments.find(item => item.x === segment.x && item.y === segment.y-1)
+        let nextSegmentUp = gameSegments.find(item => item.x === segment.x-1 && item.y === segment.y)
+        nextSegments = [nextSegmentRight, nextSegmentBottom, nextSegmentLeft, nextSegmentUp]
+        nextUncovering(nextSegments)
+    }
+    
+}
 
-    }else {
+function nextUncovering(segmentsList){
+    for (seg in segmentsList){
+        console.log("segmenting")
+        uncoverSegments(segmentsList[seg])
+    }
+}
+
+function uncoverSegments(segment){
+    if (segment.icon === 0 && segment.hidden){
+        segment.htmlElem.style.backgroundColor = "white"
+        segment.hidden = false
+        sequenceForNexUncovering(segment)
+       
+
+    }else if(segment.hidden) {
         segment.htmlElem.style.backgroundColor = "white"
         segment.htmlElem.innerHTML = segment.icon
+        segment.hidden = false
     }
 }
 
