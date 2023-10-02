@@ -3,7 +3,7 @@ let xPoolsCount = 8
 let yPollsCount = 8
 let timerMinutes = 10
 let timerSeconds = 0
-let numberOfMineCovers = 8
+let numberOfMineCovers = numberOfMines
 let interval
 let gameStartFlag = true
 let gameCountdownFlag = true
@@ -11,6 +11,7 @@ let gameEnded = false
 let gameSegments = []
 let gameBoard =  document.getElementById("game-grid")
 let mineSegments = []
+let allSegments = []
 let minutes = 1 
 let seconds = 20
 let gameStateEmoji = document.getElementById("game-state-emoji")
@@ -23,7 +24,8 @@ function gameReset() {
     gameCountdownFlag = true
     gameEnded = false
     mineSegments = []
-    gameSegments=[]
+    gameSegments = []
+    allSegments = []
     minutes = timerMinutes
     seconds = timerSeconds
     gameStateEmoji.innerHTML = "😊"
@@ -48,7 +50,8 @@ function generateOneSegment(xPosition, yPosition, id){
         htmlElem: undefined,
         icon: 0,
         id: id,
-        hidden: true
+        hidden: true,
+        blocked: false
     }
 
    newSegment.htmlElem = document.createElement("button")
@@ -60,10 +63,26 @@ function generateOneSegment(xPosition, yPosition, id){
     newSegment.htmlElem.style.gridRowStart = xPosition
     newSegment.htmlElem.style.backgroundColor = "#D2E0FB" 
     newSegment.htmlElem.id = id
+    newSegment.htmlElem.addEventListener('contextmenu', (button) => {
+        console.log("🖱 right click detected!")
+        console.log(button.target)
+        // element = document.getElementById(button.target.id)
+        element = allSegments.find(item => item.id === Number(button.target.id))
+        console.log(element)
+        if (numberOfMineCovers > 0){
+            console.log("passed")
+            element.blocked = !element.blocked
+            element.htmlElem.style.backgroundColor = "blue"
+            console.log(element.blocked)
+        }
+        
+        // newSegment. htmlElem.style.backgroundColor = "yellow"
+    })
     newSegment.htmlElem.onclick = function action(button){actionAfterClick(button)}
 
 
     gameSegments.push(newSegment)
+    allSegments.push(newSegment)
     gameBoard.appendChild(newSegment.htmlElem)
     
 }
@@ -85,7 +104,6 @@ function minesGenerating(randomNumbersList){
     for (number in randomNumbersList){
         let segmentWitchMine = gameSegments[randomNumbersList[number]]
         segmentWitchMine.isAbomb = true
-        // segmentWitchMine.htmlElem.style.backgroundColor = "red"
         mineSegments.push(segmentWitchMine)
       
     }
@@ -162,10 +180,7 @@ function localizingNearMineSegments(x, y){
         || (seg.x === x && seg.y === y-1)|| (seg.x === x && seg.y === y+1)
         || (seg.x === x+1 && seg.y === y)|| (seg.x === x-1 && seg.y === y))
         {
-            
             seg.icon++
-           
-            // seg.htmlElem.innerHTML = `${seg.icon}`
         }
     }
 }
@@ -210,6 +225,7 @@ function upEdgeUncovering(segment){
             let nextSegmentBottom = gameSegments.find(item => item.x === segment.x && item.y === segment.y + 1)
             let nextSegmentLeft = gameSegments.find(item => item.x === segment.x && item.y === segment.y - 1)
             let nextSegments = [nextSegmentRight, nextSegmentBottom, nextSegmentLeft]
+            console.log("up edge")
             nextUncovering(nextSegments)
     }
 }
@@ -218,7 +234,7 @@ function generalMiddleUncovering(segment){
     if (segment.x > 1 && segment.x < xPoolsCount && segment.y > 1 && segment.y < yPollsCount){
             // general middle
             let nextSegmentRight = gameSegments.find(item => item.x === segment.x && item.y === segment.y + 1) 
-            let nextSegmentBottom = gameSegments.find(item => item.x + 1 === segment.x && item.y === segment.y )
+            let nextSegmentBottom = gameSegments.find(item => item.x === segment.x + 1 && item.y === segment.y )
             let nextSegmentLeft = gameSegments.find(item => item.x === segment.x && item.y === segment.y - 1)
             let nextSegmentUp = gameSegments.find(item => item.x === segment.x - 1 && item.y === segment.y)
             let nextSegments = [nextSegmentRight, nextSegmentBottom, nextSegmentLeft, nextSegmentUp]
@@ -309,6 +325,8 @@ function nextUncovering(segmentsList){
 }
 
 function uncoverSegments(segment){
+   
+
     if (segment.icon === 0 && segment.hidden){
         segment.htmlElem.style.backgroundColor = "white"
         segment.hidden = false
@@ -323,6 +341,9 @@ function uncoverSegments(segment){
 }
 
 function actionAfterClick(button){
+    if (segment.blocked) {
+        return
+    }
     if (gameEnded) return
 
     
