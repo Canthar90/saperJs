@@ -17,6 +17,7 @@ let seconds = 20
 let gameStateEmoji = document.getElementById("game-state-emoji")
 let gameResetButton = document.getElementById("game-emoji")
 let notABombSegments
+let score = 0
 
 
 function gameReset() {
@@ -29,6 +30,8 @@ function gameReset() {
     minutes = timerMinutes
     seconds = timerSeconds
     gameStateEmoji.innerHTML = "😊"
+    score = 0
+
 }
 
 
@@ -232,7 +235,7 @@ function upEdgeUncovering(segment){
             let nextSegmentBottom = gameSegments.find(item => item.x === segment.x && item.y === segment.y + 1)
             let nextSegmentLeft = gameSegments.find(item => item.x === segment.x && item.y === segment.y - 1)
             let nextSegments = [nextSegmentRight, nextSegmentBottom, nextSegmentLeft]
-            console.log("up edge")
+           
             nextUncovering(nextSegments)
     }
 }
@@ -332,9 +335,12 @@ function nextUncovering(segmentsList){
 }
 
 function uncoverSegments(segment){
-   
+    score++
+    checkScore()
 
     if (segment.icon === 0 && segment.hidden){
+        
+
         segment.htmlElem.style.backgroundColor = "white"
         segment.hidden = false
         sequenceForNexUncovering(segment)
@@ -347,10 +353,21 @@ function uncoverSegments(segment){
     }
 }
 
+
+function checkScore(){
+    if (score >= gameSegments.length){
+        
+        gameEnded = true
+        gameStateEmoji.innerHTML = "🎉"
+    } 
+}
+
+
 function actionAfterClick(button){
     if (segment.blocked) {
         return
     }
+
     if (gameEnded) return
 
     
