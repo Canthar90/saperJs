@@ -64,19 +64,14 @@ function generateOneSegment(xPosition, yPosition, id){
     newSegment.htmlElem.style.backgroundColor = "#D2E0FB" 
     newSegment.htmlElem.id = id
     newSegment.htmlElem.addEventListener('contextmenu', (button) => {
-        console.log("🖱 right click detected!")
-        console.log(button.target)
-        // element = document.getElementById(button.target.id)
+
         element = allSegments.find(item => item.id === Number(button.target.id))
-        console.log(element)
-        if (numberOfMineCovers > 0){
-            console.log("passed")
-            element.blocked = !element.blocked
-            element.htmlElem.style.backgroundColor = "blue"
-            console.log(element.blocked)
+    
+        if (numberOfMineCovers > 0 && element.hidden){
+            
+            coveredPoleColorChange(element)
         }
         
-        // newSegment. htmlElem.style.backgroundColor = "yellow"
     })
     newSegment.htmlElem.onclick = function action(button){actionAfterClick(button)}
 
@@ -84,6 +79,18 @@ function generateOneSegment(xPosition, yPosition, id){
     gameSegments.push(newSegment)
     allSegments.push(newSegment)
     gameBoard.appendChild(newSegment.htmlElem)
+    
+}
+
+function coveredPoleColorChange(element){
+    if (element.htmlElem.style.backgroundColor ==='blue'){
+        console.log("reverting")
+        element.htmlElem.style.backgroundColor = "#D2E0FB"
+        numberOfMineCovers++ 
+    } else {
+        element.htmlElem.style.backgroundColor = 'blue'
+        numberOfMineCovers--
+    }
     
 }
 
