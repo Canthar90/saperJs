@@ -12,8 +12,8 @@ let gameSegments = []
 let gameBoard =  document.getElementById("game-grid")
 let mineSegments = []
 let allSegments = []
-let minutes = 1 
-let seconds = 20
+let minutes = timerMinutes 
+let seconds = timerSeconds
 let gameStateEmoji = document.getElementById("game-state-emoji")
 let gameResetButton = document.getElementById("game-emoji")
 let notABombSegments
@@ -87,7 +87,6 @@ function generateOneSegment(xPosition, yPosition, id){
 
 function coveredPoleColorChange(element){
     if (element.htmlElem.style.backgroundColor ==='blue'){
-        console.log("reverting")
         element.htmlElem.style.backgroundColor = "#D2E0FB"
         numberOfMineCovers++ 
     } else {
@@ -335,11 +334,12 @@ function nextUncovering(segmentsList){
 }
 
 function uncoverSegments(segment){
-    score++
-    checkScore()
+    
 
     if (segment.icon === 0 && segment.hidden){
+        score++
         
+        checkScore()
 
         segment.htmlElem.style.backgroundColor = "white"
         segment.hidden = false
@@ -347,6 +347,9 @@ function uncoverSegments(segment){
        
 
     }else if(segment.hidden) {
+        score++
+       
+        checkScore()
         segment.htmlElem.style.backgroundColor = "white"
         segment.htmlElem.innerHTML = segment.icon
         segment.hidden = false
