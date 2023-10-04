@@ -4,8 +4,17 @@
         
     <body>
         <div id="options" class="options">
-            <form action="javasctipt:changeParameters()"></form>
-            <input type="text" id="mine-desired-count" name="mines">
+            <form action=" " id="option-form">
+                <label for="mine-desired-count">Mine count: </label>
+                <input type="text" id="mine-desired-count" name="mines" placeholder="10">
+                
+                <label for="x-pools-count">Numbers of x polls: </label>
+                <input type="text" id="x-pools-count" name="x-polls" placeholder="8">
+                <label for="y-pools-count">Number of y polls: </label>
+                <input type="text" id="y-pools-count" name="y-polls" placeholder="8">
+                <input type="submit" value="Submit">
+
+        </form>
         </div>
 
         <div id="menu" class="main-menu">

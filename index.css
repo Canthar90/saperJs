@@ -40,3 +40,8 @@
     justify-content: center;
     gap: 0.2rem;
 }
+
+.options{
+    display: flex;
+    justify-content: center;
+}

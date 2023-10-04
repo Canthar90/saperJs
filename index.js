@@ -31,9 +31,31 @@ function gameReset() {
     seconds = timerSeconds
     gameStateEmoji.innerHTML = "😊"
     score = 0
-
+    numberOfMineCovers = numberOfMines
 }
 
+let optionForm = document.getElementById("option-form")
+optionForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    let newNumberOfMines = document.getElementById("mine-desired-count")
+    let newNumberOfx = document.getElementById("x-pools-count")
+    let newNumberOfy = document.getElementById("y-pools-count")
+    if (!newNumberOfMines.value || !newNumberOfx.value || !newNumberOfy.value){
+        return
+    }
+
+    numberOfMines = Number(newNumberOfMines.value)
+    xPoolsCount = Number(newNumberOfx.value)
+    yPollsCount = Number(newNumberOfy.value)
+    
+    for (seg in allSegments){
+        allSegments[seg].htmlElem.remove()
+    } 
+
+    gameReset()
+    
+})
 
 
 const rem = Number(parseFloat(getComputedStyle(document.documentElement).fontSize)) 
